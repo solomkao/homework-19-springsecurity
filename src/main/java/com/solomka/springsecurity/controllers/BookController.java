@@ -7,6 +7,7 @@ import com.solomka.springsecurity.services.BookService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,6 +25,7 @@ public class BookController {
     }
 
     @GetMapping(value = "/books", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('user:read')")
     public ResponseEntity<List<Book>> getAll(
             @RequestParam(value = "sortBy", defaultValue = "byName", required = false) String sortBy,
             @RequestParam(value = "limit", defaultValue = "10", required = false) String limit,
@@ -40,6 +42,7 @@ public class BookController {
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
+    @PreAuthorize("hasAnyAuthority('user:write')")
     public ResponseEntity<Book> createBook(@RequestBody CreateBookDto createBookDto) {
         Book newBook = new Book(
                 UUID.randomUUID().toString(),
@@ -55,6 +58,7 @@ public class BookController {
     }
 
     @GetMapping(value = "/books/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('user:read')")
     public ResponseEntity<Book> getById(
             @PathVariable(value = "bookId") String bookId
     ) {
@@ -66,6 +70,7 @@ public class BookController {
     }
 
     @DeleteMapping(value = "/books/{bookId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAnyAuthority('user:write')")
     public ResponseEntity<Book> deleteById(
             @PathVariable(value = "bookId") String bookId
     ) {
