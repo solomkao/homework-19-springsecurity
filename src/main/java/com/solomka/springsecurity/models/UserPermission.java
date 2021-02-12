@@ -1,4 +1,4 @@
-package com.solomka.springsecurity.security;
+package com.solomka.springsecurity.models;
 
 public enum UserPermission {
     READ("user:read"),

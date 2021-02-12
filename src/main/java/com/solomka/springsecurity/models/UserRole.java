@@ -1,6 +1,7 @@
-package com.solomka.springsecurity.security;
+package com.solomka.springsecurity.models;
 
 import com.google.common.collect.Sets;
+import com.solomka.springsecurity.models.UserPermission;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
