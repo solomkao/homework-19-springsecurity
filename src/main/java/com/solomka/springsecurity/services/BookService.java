@@ -50,6 +50,7 @@ public class BookService {
         }
         return name.trim();
     }
+
     public List<Book> getAll() {
         return bookDao.getAll();
     }
@@ -60,6 +61,7 @@ public class BookService {
         }
         return bookDao.deleteById(bookId);
     }
+
     public Book deleteBookById(final String bookId) {
         return this.bookDao.deleteById(bookId);
     }
