@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
-@RequestMapping("library")
 public class WelcomeController {
 
     private final AuthenticationManager manager;
