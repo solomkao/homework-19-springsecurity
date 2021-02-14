@@ -1,15 +1,13 @@
 package com.solomka.springsecurity.models;
 
-import com.google.common.collect.Sets;
-import com.solomka.springsecurity.models.UserPermission;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 public enum UserRole {
-    LIBRARIAN(Sets.newHashSet(UserPermission.READ, UserPermission.WRITE)),
-    READER(Sets.newHashSet(UserPermission.READ));
+    LIBRARIAN(Set.of(UserPermission.READ, UserPermission.WRITE)),
+    READER(Set.of(UserPermission.READ));
 
     private final Set<UserPermission> permissions;
 
