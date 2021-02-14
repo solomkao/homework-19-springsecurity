@@ -4,6 +4,7 @@ import com.solomka.springsecurity.daos.UserDao;
 import com.solomka.springsecurity.models.User;
 import com.solomka.springsecurity.models.dtos.UserDto;
 import com.solomka.springsecurity.security.jwts.JsonWebTokenProvider;
+import com.solomka.springsecurity.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,13 +24,13 @@ import java.util.Map;
 public class WelcomeController {
 
     private final AuthenticationManager manager;
-    private final UserDao userDao;
+    private final UserService userService;
     private final JsonWebTokenProvider provider;
 
     @Autowired
-    public WelcomeController(AuthenticationManager manager, UserDao userDao, JsonWebTokenProvider provider) {
+    public WelcomeController(AuthenticationManager manager, UserService userService, JsonWebTokenProvider provider) {
         this.manager = manager;
-        this.userDao = userDao;
+        this.userService = userService;
         this.provider = provider;
     }
 
@@ -39,8 +40,8 @@ public class WelcomeController {
     public ResponseEntity<Map<String, String>> login(@RequestBody UserDto userDto) {
         String username = userDto.getUsername();
         String password = userDto.getPassword();
+        User user = userService.findUserByUsername(username);
         manager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
-        User user = userDao.findByLogin(username).orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
         String token = provider.createToken(username, user.getRole().name());
         Map<String, String> response = new HashMap<>();
         response.put("username", username);

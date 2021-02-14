@@ -52,7 +52,7 @@ public class JsonWebTokenProvider {
             Jws<Claims> claimsJws = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token);
             return claimsJws.getBody().getExpiration().after(new Date());
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
-            throw new InvalidTokenException(HttpStatus.UNAUTHORIZED);
+            throw new InvalidTokenException();
         }
     }
 

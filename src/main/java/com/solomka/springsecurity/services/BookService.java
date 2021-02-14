@@ -20,14 +20,19 @@ public class BookService {
         this.bookDao = bookDao;
     }
 
-    public Book getById(final String bookId) {
+    public Book getById(final String bookId) throws BadIdException {
         if (bookId == null || bookId.isBlank()) {
             throw new BadIdException();
         }
-        return bookDao.getById(bookId);
+
+        Book book = bookDao.getById(bookId);
+        if (book == null) {
+            throw new BadIdException();
+        }
+        return book;
     }
 
-    public Book createBook(final CreateBookDto createBookDto) {
+    public Book createBook(final CreateBookDto createBookDto) throws BookNameIsNullException, BookNameIsTooLongException {
         final Book newBook = new Book(UUID.randomUUID().toString());
         newBook.setName(getValidatedBookName(createBookDto.getName()));
         newBook.setDescription(createBookDto.getDescription());
@@ -35,17 +40,14 @@ public class BookService {
         newBook.setNumberOfWords(createBookDto.getNumberOfWords());
         newBook.setRating(createBookDto.getRating());
         newBook.setYearOfPublication(createBookDto.getYearOfPublication());
-
-        Book book = bookDao.addBook(newBook);
-        System.out.println("book = " + book);
-        return book;
+        return bookDao.addBook(newBook);
     }
 
-    public String getValidatedBookName(final String name) {
+    public String getValidatedBookName(final String name) throws BookNameIsNullException, BookNameIsTooLongException {
         if (name == null) {
             throw new BookNameIsNullException();
         }
-        if (name.length() > 1000) {
+        if (name.length() > 10) {
             throw new BookNameIsTooLongException();
         }
         return name.trim();
@@ -55,14 +57,14 @@ public class BookService {
         return bookDao.getAll();
     }
 
-    public Book deleteBook(final String bookId) {
+    public Book deleteBook(final String bookId) throws BadIdException {
         if (bookId == null || bookId.isBlank()) {
             throw new BadIdException();
         }
-        return bookDao.deleteById(bookId);
-    }
-
-    public Book deleteBookById(final String bookId) {
-        return this.bookDao.deleteById(bookId);
+        Book book = bookDao.deleteById(bookId);
+        if (book == null) {
+            throw new BadIdException();
+        }
+        return book;
     }
 }
